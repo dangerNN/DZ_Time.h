@@ -1,59 +1,21 @@
 ﻿#include "Time.h"
+#include "Time.h"
+#include "Bus.h"
 #include <iostream>
 #include <vector>
-
-using namespace std;
-
-struct LessonSchedule {
-    Time_ start;
-    Time_ end;
-};
+#include <windows.h>
 
 int main() {
-    setlocale(LC_ALL, "");
-    int lessonDuration, shortBreak, longBreak, longBreakPosition, lessonCount;
-    int hour, minute;
+    SetConsoleOutputCP(1251);
 
-    cout << "Введите время начала (часы и минуты): ";
-    cin >> hour >> minute;
-    cout << "Введите длительность пары (в минутах): ";
-    cin >> lessonDuration;
-    cout << "Введите длительность обычной перемены (в минутах): ";
-    cin >> shortBreak;
-    cout << "Введите длительность большой перемены (в минутах): ";
-    cin >> longBreak;
-    cout << "Введите позицию большой перемены: ";
-    cin >> longBreakPosition;
-    cout << "Введите количество пар: ";
-    cin >> lessonCount;
+    Time_ startTime(6, 0, 0, true);
+    Time_ endTime(11, 0, 0, true);
+    int routeDuration = 30;
+    int restTime = 10;
 
-    vector<LessonSchedule> schedule;
-    Time_ current(hour, minute, 0);
+    Bus bus(startTime, endTime, routeDuration, restTime);
 
-    for (int i = 0; i < lessonCount; i++) {
-        LessonSchedule lesson;
-        lesson.start = current;
-        current += lessonDuration * 60;
-        lesson.end = current;
-        schedule.push_back(lesson);
-
-        if (i + 1 == longBreakPosition) {
-            current += longBreak * 60;
-        }
-        else if (i + 1 < lessonCount) {
-            current += shortBreak * 60;
-        }
-    }
-
-    cout << "\nРасписание звонков:" << endl;
-    for (size_t i = 0; i < schedule.size(); i++) {
-        cout << "Пара " << i + 1 << ": ";
-        schedule[i].start.showTime();
-        cout << " - ";
-        schedule[i].end.showTime();
-        cout << endl;
-    }
+    bus.printSchedule();
 
     return 0;
 }
-

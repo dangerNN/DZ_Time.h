@@ -14,7 +14,13 @@ Time_::Time_() {
 }
 
 Time_::Time_(int hour, int minutes, int seconds, bool format)
-    : hour(hour), minutes(minutes), seconds(seconds), format(format) {}
+    : hour(hour), minutes(minutes), seconds(seconds), format(format) {
+    if (!valid()) {
+        this->hour = 0;
+        this->minutes = 0;
+        this->seconds = 0;
+    }
+}
 
 Time_::Time_(const Time_& obj) {
     hour = obj.hour;
@@ -81,14 +87,15 @@ void Time_::untickTime() {
 void Time_::showTime() const {
     if (format) {
         cout << setw(2) << setfill('0') << hour << ":"
-             << setw(2) << setfill('0') << minutes << ":"
-             << setw(2) << setfill('0') << seconds << endl;
-    } else {
+            << setw(2) << setfill('0') << minutes << ":"
+            << setw(2) << setfill('0') << seconds;
+    }
+    else {
         string period = (hour < 12) ? "AM" : "PM";
         int displayHour = (hour % 12 == 0) ? 12 : hour % 12;
         cout << setw(2) << setfill('0') << displayHour << ":"
-             << setw(2) << setfill('0') << minutes << ":"
-             << setw(2) << setfill('0') << seconds << " " << period << endl;
+            << setw(2) << setfill('0') << minutes << ":"
+            << setw(2) << setfill('0') << seconds << " " << period;
     }
 }
 
@@ -130,24 +137,28 @@ Time_& Time_::operator-=(int s) {
 }
 
 Time_& Time_::operator+=(float m) {
-    int minutesToAdd = static_cast<int>(m);
-    *this += minutesToAdd * 60;
+    int totalMinutes = static_cast<int>(m);
+    int totalSeconds = totalMinutes * 60;
+    *this += totalSeconds;
     return *this;
 }
 
 Time_& Time_::operator-=(float m) {
-    int minutesToSubtract = static_cast<int>(m);
-    *this -= minutesToSubtract * 60;
+    int totalMinutes = static_cast<int>(m);
+    int totalSeconds = totalMinutes * 60;
+    *this -= totalSeconds;
     return *this;
 }
 
 Time_& Time_::operator+=(long h) {
-    *this += h * 3600;
+    int totalSeconds = static_cast<int>(h * 3600);
+    *this += totalSeconds;
     return *this;
 }
 
 Time_& Time_::operator-=(long h) {
-    *this -= h * 3600;
+    int totalSeconds = static_cast<int>(h * 3600);
+    *this -= totalSeconds;
     return *this;
 }
 
